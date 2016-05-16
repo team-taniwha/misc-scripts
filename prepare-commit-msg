@@ -1,0 +1,9 @@
+#!/bin/bash
+
+branchName=$(git symbolic-ref -q HEAD | sed 's/^.*b_//')
+firstLine=$(head -n1 $1)
+
+if [ -z "$firstLine"  ] ;then #Check that this is not an amend by checking that the first line is empty
+  sed -i '.bak' "1s/^/B#$branchName/" $1
+fi
+
