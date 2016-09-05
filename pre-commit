@@ -5,7 +5,12 @@
 
 exit 0 if ARGV.include?('--no-verify')
 # Update this list with your own forbidden keywords
-KEYWORDS = %w(binding.pry debugger byebug)
+KEYWORDS = [
+  'binding.pry',
+  'debugger',
+  'byebug',
+  'And pause',
+]
 
 def red(text)    "\033[31m#{text}\033[0m"; end
 def yellow(text) "\033[33m#{text}\033[0m"; end
@@ -40,9 +45,9 @@ if $?.exitstatus.zero?
   puts "# Check following lines:"
   files_changed.each do |file|
     KEYWORDS.each do |keyword|
-      %x(git grep -q #{keyword} #{file})
+      %x(git grep -q "#{keyword}" #{file})
       if $?.exitstatus.zero?
-        line = %x(git grep -n #{keyword} #{file} | awk -F ":" '{print $2}').split.join(', ')
+        line = %x(git grep -n "#{keyword}" #{file} | awk -F ":" '{print $2}').split.join(', ')
         puts "#\t#{red(file)}:#{line} contains #{yellow keyword}."
       end
     end
