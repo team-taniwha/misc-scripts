@@ -1,18 +1,12 @@
 #!/bin/bash
 
-# Using the current git branch name, extract the beetl number from
-# the naming scheme
-# `b_12345`
-#
-# Use the beetl number as the start of the first line of the commit message
-# `B#12345`
-
-branchName=$(git symbolic-ref -q HEAD | sed 's/^.*b_//')
+# Use the branch name as the start of the commit message
+branchName=$(git symbolic-ref --short -q HEAD)
 firstLine=$(head -n1 $1)
 
 if [ $branchName != $(git symbolic-ref -q HEAD) ] ;then
   if [ -z "$firstLine"  ] ;then #Check that this is not an amend by checking that the first line is empty
-    sed -i '.bak' "1s/^/B#$branchName/" $1
+    sed -i '.bak' "1s/^/$branchName/" $1
   fi
 fi
 
